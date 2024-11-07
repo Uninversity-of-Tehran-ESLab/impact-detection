@@ -1,7 +1,7 @@
 # In the name of God
 #TODO: Fix this!
 
-from impact_utils import detect_markers
+import ImpactUtils
 
 from typing import Sequence, Tuple
 
@@ -68,7 +68,7 @@ while True:
 
     if not ret or cv2.waitKey(24) == 27:
         break
-    corners, ids, frame = detect_markers(frame, draw_markers=True)
+    corners, ids, frame = ImpactUtils.detect_markers(frame, draw_markers=True)
     cv2.imshow('frame', frame)
 
     if len(corners) < 4:

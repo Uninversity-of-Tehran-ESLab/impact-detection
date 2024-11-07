@@ -1,7 +1,7 @@
 # In the name of God
 
 import cv2
-import impact_utils
+import ImpactUtils
 #TODO: make this a function and add it to main!
 
 def test_marker_detection(source: int | str) -> None:
@@ -24,7 +24,7 @@ def test_marker_detection(source: int | str) -> None:
                 if not is_captured:
                     continue
                 
-                _, _, frame_markers = impact_utils.detect_markers(frame=frame,
+                _, _, frame_markers = ImpactUtils.detect_markers(frame=frame,
                                                                 draw_markers=True)
 
                 cv2.imshow("CAP", frame_markers)
@@ -33,7 +33,7 @@ def test_marker_detection(source: int | str) -> None:
                     break
         case type(str):
             frame = cv2.imread(source)
-            _, _, frame_markers = impact_utils.detect_markers(frame=frame,
+            _, _, frame_markers = ImpactUtils.detect_markers(frame=frame,
                                                                 draw_markers=True)
 
             cv2.imshow("CAP", frame_markers)

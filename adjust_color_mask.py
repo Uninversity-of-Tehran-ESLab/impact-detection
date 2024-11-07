@@ -1,7 +1,7 @@
 # In the name of God
 import cv2
 import numpy as np
-import impact_utils
+import ImpactUtils
 
 def nothing(x):
     pass
@@ -16,7 +16,7 @@ def adjust_color_mask(
     """
     # Creating the track_bars:
     track_bar_window_name = "TrackBar"
-    impact_utils.create_track_bar(window_name=track_bar_window_name)
+    ImpactUtils.create_track_bar(window_name=track_bar_window_name)
 
     match type(source):        
         case int:
@@ -26,10 +26,10 @@ def adjust_color_mask(
                 if not is_captured:
                     continue
                 # Get trackbar positions
-                track_bar_position = impact_utils.get_track_bar_position(
+                track_bar_position = ImpactUtils.get_track_bar_position(
                     window_name=track_bar_window_name
                 )
-                mask, filtered_image = impact_utils.get_mask(frame, *track_bar_position)
+                mask, filtered_image = ImpactUtils.get_mask(frame, *track_bar_position)
 
                 # Display the result
                 cv2.imshow('Filtered Image', filtered_image)
