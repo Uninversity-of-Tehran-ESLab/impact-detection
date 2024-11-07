@@ -52,7 +52,7 @@ def main():
         test_marker_detection.test_marker_detection()
 
     if args.adjust_color_mask:
-        adjust_color_mask.adjust_color_mask(0)
+        adjust_color_mask.adjust_color_mask(1)
 
 if __name__ == "__main__":
     main()

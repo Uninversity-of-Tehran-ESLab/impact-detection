@@ -9,6 +9,62 @@ import numpy as np
 
 class ImpactUtils:
     @staticmethod
+    def __find_center(marker_corners: Sequence[cv2.typing.MatLike]) -> Tuple[float, float]:
+        # The Sequence only contains one item
+        marker_corners = marker_corners[0]
+        total = 0
+        for corner in marker_corners:
+            total += corner
+        return total / len(marker_corners)
+
+    @staticmethod
+    def sort_markers(markers_corners: Sequence[cv2.typing.MatLike]) -> Sequence[cv2.typing.MatLike]:
+        # Grouping two left makers and two right markers
+        markers_corners = sorted(
+            markers_corners,
+            key=lambda x: ImpactUtils.__find_center(x)[0]
+        )
+
+        left_markers = markers_corners[0:2]
+        right_markers = markers_corners[2:4]
+
+        # Sorting based on height
+        left_markers = sorted(
+            left_markers,
+            key=lambda x: ImpactUtils.__find_center(x)[1]
+        )
+        
+        right_markers = sorted(
+            right_markers,
+            key=lambda x: ImpactUtils.__find_center(x)[1]
+        )
+
+        return np.concatenate((left_markers, right_markers))
+
+    @staticmethod
+    def draw_transformed_perspective(
+            frame: Sequence[cv2.typing.MatLike],
+            corners: Sequence[cv2.typing.MatLike],
+            width: int = 450,
+            height: int = 300
+        ) -> cv2.typing.MatLike: 
+
+        width, height = 450, 300
+        perspective = np.float32(
+            [[0, 0], [0, height], 
+            [width, 0], [width, height]]
+        )
+
+        corners = ImpactUtils.sort_markers(corners)
+
+        points = np.array([ImpactUtils.__find_center(corner) for corner in corners])
+
+        squeezed_points =np.squeeze(points)
+        matrix = cv2.getPerspectiveTransform(squeezed_points, perspective)
+        return cv2.warpPerspective(frame, matrix, (width, height))
+
+
+    @staticmethod
     def nothing(x: any) -> None:
         """
         Does nothing!
@@ -85,7 +141,6 @@ class ImpactUtils:
         filtered_image = cv2.bitwise_and(image, image, mask=mask) if apply else None
 
         return mask, filtered_image
-
 
     @staticmethod
     def detect_markers(

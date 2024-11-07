@@ -9,7 +9,7 @@ from matplotlib import pyplot as plt
 def generate_markers(marker_ids: List[int],
                      file_path: str,
                      marker_size=400, 
-                     number_of_markers_per_line=4,
+                     number_of_markers_per_line=2,
                      dictionary=cv2.aruco.DICT_6X6_250) -> None:
     """
         Generates aruco markers withe the given ids and
@@ -17,7 +17,7 @@ def generate_markers(marker_ids: List[int],
     """    
     dictionary = cv2.aruco.getPredefinedDictionary(dictionary)
 
-    a4_dimensions = (24.80, 35.08)
+    a4_dimensions = (35.08, 24.80)
     figure = plt.figure(figsize=a4_dimensions, dpi=100)
     number_of_lines = math.ceil(len(marker_ids) / number_of_markers_per_line)
 
