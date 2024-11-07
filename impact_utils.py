@@ -19,3 +19,8 @@ def detect_markers(
     frame_markers = cv2.aruco.drawDetectedMarkers(frame.copy(), corners, ids)
     
     return corners, ids, (frame_markers if draw_markers else None)
+
+def apply_color_filter(
+        frame: MatLike
+)
+    cv2.
