@@ -1,6 +1,7 @@
 # In the name of God
 import argparse
 import generate_markers
+import adjust_color_mask
 import test_marker_detection
 
 def main():
@@ -33,6 +34,11 @@ def main():
         action="store_true",
         help="A demo to make sure markers are being detected properly"
     )
+    parser.add_argument(
+        "--adjust-color-mask",
+        action="store_true",
+        help="Gives you an interactive window to adjust the color mask"
+    )
     
     args = parser.parse_args()
 
@@ -44,6 +50,9 @@ def main():
         )
     if args.test_marker_detection:
         test_marker_detection.test_marker_detection()
+
+    if args.adjust_color_mask:
+        adjust_color_mask.adjust_color_mask(0)
 
 if __name__ == "__main__":
     main()

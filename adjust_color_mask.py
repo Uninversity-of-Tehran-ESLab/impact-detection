@@ -1,44 +1,41 @@
+# In the name of God
 import cv2
 import numpy as np
+import impact_utils
 
 def nothing(x):
     pass
 
-# Load the image
-image = cv2.imread('your_image.jpg')
-hsv_image = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
+def adjust_color_mask(
+        source: int | str,
+        # mask_file_path: str
+    ) -> None:
+    """
+        Gives an interactive windows where you can adjust and fine
+        tune your mask based on either a video feedback or a picture
+    """
+    # Creating the track_bars:
+    track_bar_window_name = "TrackBar"
+    impact_utils.create_track_bar(window_name=track_bar_window_name)
 
-# Create a window with trackbars for each HSV component
-cv2.namedWindow('Trackbars')
-cv2.createTrackbar('Lower H', 'Trackbars', 0, 179, nothing)
-cv2.createTrackbar('Upper H', 'Trackbars', 179, 179, nothing)
-cv2.createTrackbar('Lower S', 'Trackbars', 0, 255, nothing)
-cv2.createTrackbar('Upper S', 'Trackbars', 255, 255, nothing)
-cv2.createTrackbar('Lower V', 'Trackbars', 0, 255, nothing)
-cv2.createTrackbar('Upper V', 'Trackbars', 255, 255, nothing)
+    match type(source):        
+        case int:
+            video_capture = cv2.VideoCapture(source)
+            while True:
+                is_captured, frame = video_capture.read()
+                if not is_captured:
+                    continue
+                # Get trackbar positions
+                track_bar_position = impact_utils.get_track_bar_position(
+                    window_name=track_bar_window_name
+                )
+                mask, filtered_image = impact_utils.get_mask(frame, *track_bar_position)
 
-while True:
-    # Get trackbar positions
-    lower_h = cv2.getTrackbarPos('Lower H', 'Trackbars')
-    upper_h = cv2.getTrackbarPos('Upper H', 'Trackbars')
-    lower_s = cv2.getTrackbarPos('Lower S', 'Trackbars')
-    upper_s = cv2.getTrackbarPos('Upper S', 'Trackbars')
-    lower_v = cv2.getTrackbarPos('Lower V', 'Trackbars')
-    upper_v = cv2.getTrackbarPos('Upper V', 'Trackbars')
+                # Display the result
+                cv2.imshow('Filtered Image', filtered_image)
+                cv2.imshow('Mask', mask)
 
-    # Set the HSV range
-    lower_bound = np.array([lower_h, lower_s, lower_v])
-    upper_bound = np.array([upper_h, upper_s, upper_v])
+                if cv2.waitKey(1) & 0xFF == 27:  # Press 'Esc' to exit
+                    break
 
-    # Create the mask and apply it to the original image
-    mask = cv2.inRange(hsv_image, lower_bound, upper_bound)
-    filtered_image = cv2.bitwise_and(image, image, mask=mask)
-
-    # Display the result
-    cv2.imshow('Filtered Image', filtered_image)
-    cv2.imshow('Mask', mask)
-
-    if cv2.waitKey(1) & 0xFF == 27:  # Press 'Esc' to exit
-        break
-
-cv2.destroyAllWindows()
+            cv2.destroyAllWindows()
