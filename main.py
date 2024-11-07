@@ -3,6 +3,8 @@ import argparse
 import generate_markers
 import adjust_color_mask
 import test_marker_detection
+import test_transform_perspective
+
 
 def main():
     parser = argparse.ArgumentParser("#TODO: add description")
@@ -29,6 +31,8 @@ def main():
         default=400,
         help="Specify marker size (in pixels)"
     )
+
+
     parser.add_argument(
         "--test-marker-detection",
         action="store_true",
@@ -40,6 +44,13 @@ def main():
         help="Gives you an interactive window to adjust the color mask"
     )
     
+
+    parser.add_argument(
+        "--test-transform-perspective",
+        action="store_true",
+        help=""
+    )
+
     args = parser.parse_args()
 
     if args.generate_markers:
@@ -53,6 +64,9 @@ def main():
 
     if args.adjust_color_mask:
         adjust_color_mask.adjust_color_mask(1)
+
+    if args.test_transform_perspective:
+        test_transform_perspective.test_transform_perspective()
 
 if __name__ == "__main__":
     main()
