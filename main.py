@@ -2,6 +2,7 @@
 import argparse
 import generate_markers
 import adjust_color_mask
+import impact_sound_detection
 import test_marker_detection
 import test_transform_perspective
 
@@ -51,6 +52,18 @@ def main():
         help=""
     )
 
+    parser.add_argument(
+        "-v", "--test-sound-impact",
+        action="store_true",
+        help="Tests the detection of ball sound impact on audio."
+    )
+    parser.add_argument(
+        "--threshold",
+        type=int,
+        default=5000,
+        help="Specify a threshold for impact."
+    )
+
     args = parser.parse_args()
 
     if args.generate_markers:
@@ -67,6 +80,9 @@ def main():
 
     if args.test_transform_perspective:
         test_transform_perspective.test_transform_perspective()
+
+    if args.test_sound_impact:
+        impact_sound_detection.impact_sound_detection(threshold=args.threshold)
 
 if __name__ == "__main__":
     main()
