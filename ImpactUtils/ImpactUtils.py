@@ -1,8 +1,9 @@
 # In the name of God
 
 # Internal
-from typing import List, Sequence, Tuple, Optional
+import time
 import math
+from typing import List, Sequence, Tuple, Optional
 from datetime import datetime
 
 
@@ -11,7 +12,6 @@ import cv2
 import pyaudio
 import numpy as np
 import matplotlib as mpl
-from ultralytics import YOLO
 from matplotlib import pyplot as plt
 
 
@@ -77,32 +77,9 @@ class ImpactUtils:
             plt.imshow(image, cmap=mpl.cm.gray, interpolation="nearest")
             axis.axis("off")
 
-        plt.savefig(file_path, dpi=100, bbox_inches='tight')
+        plt.savefig(file_path, dpi=100)
         plt.close()
 
-    @staticmethod
-    def sort_markers(markers_corners: Sequence[cv2.typing.MatLike]) -> Sequence[cv2.typing.MatLike]:
-        # Grouping two left makers and two right markers
-        markers_corners = sorted(
-            markers_corners,
-            key=lambda x: ImpactUtils.__find_center(x)[0]
-        )
-
-        left_markers = markers_corners[0:2]
-        right_markers = markers_corners[2:4]
-
-        # Sorting based on height
-        left_markers = sorted(
-            left_markers,
-            key=lambda x: ImpactUtils.__find_center(x)[1]
-        )
-        
-        right_markers = sorted(
-            right_markers,
-            key=lambda x: ImpactUtils.__find_center(x)[1]
-        )
-
-        return np.concatenate((left_markers, right_markers))
 
     @staticmethod
     def draw_transformed_perspective(
@@ -118,7 +95,7 @@ class ImpactUtils:
             [width, 0], [width, height]]
         )
 
-        corners = ImpactUtils.sort_markers(corners)
+        corners = ImpactUtils.__sort_markers(corners)
 
         points = np.array([ImpactUtils.__find_center(corner) for corner in corners])
 
@@ -284,5 +261,7 @@ class ImpactUtils:
         return total / len(marker_corners)
 
 
+ 
 if __name__ == '__main__':
-    pass
+    ImpactUtils.generate_markers([1, 2, 3, 4], f"markers-{int(time.time())}.pdf")
+    ImpactUtils.draw_transformed_perspective()
