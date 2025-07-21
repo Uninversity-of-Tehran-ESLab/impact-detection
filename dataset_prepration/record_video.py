@@ -21,22 +21,17 @@ def record_video():
     recording and save the file, the user must press the 'q' key while this
     window is in focus.
     """
-    # Create the output folder if it doesn't exist
     if not os.path.exists(OUTPUT_FOLDER):
         os.makedirs(OUTPUT_FOLDER)
         print(f"Created directory: {OUTPUT_FOLDER}")
 
-    # --- Automatic File Naming Logic ---
     file_number = 1
     while True:
         output_path = os.path.join(OUTPUT_FOLDER, f"{BASE_FILENAME}_{file_number}{FILE_EXTENSION}")
         if not os.path.exists(output_path):
             break
         file_number += 1
-    # ------------------------------------
 
-    # Initialize video capture. '0' is usually the default USB camera.
-    # If you have multiple cameras, you might need to try '1', '2', etc.
     cap = cv2.VideoCapture(0)
     cap.set(cv2.CAP_PROP_FRAME_WIDTH, FRAME_WIDTH)
     cap.set(cv2.CAP_PROP_FRAME_HEIGHT, FRAME_HEIGHT)
@@ -45,7 +40,6 @@ def record_video():
         print("Error: Could not open camera.")
         return
 
-    # Define the codec (XVID is widely compatible) and create VideoWriter
     fourcc = cv2.VideoWriter_fourcc(*'XVID')
     writer = cv2.VideoWriter(output_path, fourcc, FPS, (FRAME_WIDTH, FRAME_HEIGHT))
 
@@ -64,7 +58,6 @@ def record_video():
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
 
-    # Release all resources
     cap.release()
     writer.release()
     cv2.destroyAllWindows()
